@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(52, 211, 153, 0.35);
+  color: #020617;
+}
+
+@keyframes hero-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes hero-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.hero-fade-up {
+  animation: hero-fade-up 0.9s ease both;
+}
+
+.hero-fade-up-delay-1 {
+  animation: hero-fade-up 0.9s ease 0.14s both;
+}
+
+.hero-fade-up-delay-2 {
+  animation: hero-fade-up 0.9s ease 0.28s both;
+}
+
+.hero-fade-up-delay-3 {
+  animation: hero-fade-up 0.9s ease 0.42s both;
+}
+
+.hero-fade-up-delay-4 {
+  animation: hero-fade-up 0.9s ease 0.56s both;
+}
+
+.hero-float {
+  animation: hero-float 9s ease-in-out infinite;
+}
+
+.hero-shimmer {
+  background-size: 200% 200%;
+  animation: hero-shimmer 7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-fade-up,
+  .hero-fade-up-delay-1,
+  .hero-fade-up-delay-2,
+  .hero-fade-up-delay-3,
+  .hero-fade-up-delay-4,
+  .hero-float,
+  .hero-shimmer {
+    animation: none;
+  }
+}

@@ -1,0 +1,87 @@
+import Image from "next/image";
+import Link from "next/link";
+
+export default function ServiceCard({ service }) {
+  const {
+    title = "Service",
+    description = "",
+    shortDescription = "",
+    image = "/images/project1.webp",
+    video,
+    link = "",
+  } = service || {};
+
+  const mediaSrc = video || image;
+  const isVideo = Boolean(video);
+  const hasLink = typeof link === "string" && link.trim().length > 0;
+  const isExternalLink = hasLink && /^https?:\/\//i.test(link);
+
+  return (
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white/95 shadow-[0_18px_50px_rgba(15,23,42,0.08)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_60px_rgba(15,23,42,0.14)]">
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
+        {isVideo ? (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          >
+            <source src={mediaSrc} type="video/mp4" />
+          </video>
+        ) : (
+          <Image
+            src={mediaSrc}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition duration-700 group-hover:scale-105"
+          />
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/88 via-slate-950/20 to-transparent" />
+        <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white backdrop-blur">
+          {isVideo ? "Video" : "Visual"}
+        </div>
+        <div className="absolute inset-x-4 bottom-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-emerald-200">
+            Service
+          </p>
+          <h3 className="mt-2 text-2xl font-bold tracking-tight text-white">
+            {title}
+          </h3>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <p className="text-sm leading-7 text-slate-600 md:text-base">
+          {shortDescription || description || "No description available."}
+        </p>
+
+        {hasLink ? (
+          <div className="mt-auto pt-6">
+            {isExternalLink ? (
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
+              >
+                Explore this service
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            ) : (
+              <Link
+                href={link}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
+              >
+                Explore this service
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            )}
+          </div>
+        ) : null}
+      </div>
+    </article>
+  );
+}
