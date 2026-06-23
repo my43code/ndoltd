@@ -480,13 +480,7 @@ export default function AdminPage() {
           ) : null}
         </div>
         <button
-          /*onClick={() => signOut({ callbackUrl: "/login" })}*/
-          onClick={async () => {
-            await signOut({ redirect: false });
-           router.push("/login");
-                      
-          }}
-
+          onClick={() => signOut({ callbackUrl: "/login" })}
           className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800"
         >
           Sign out
