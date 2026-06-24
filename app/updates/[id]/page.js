@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+/*import { notFound } from "next/navigation";
 import Link from "next/link";
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/Post";
@@ -161,7 +161,7 @@ export default async function PostDetailPage({ params }) {
   );
 }*/
 
-/*import { notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/Post";
@@ -251,4 +251,3 @@ export default async function PostDetailPage({ params }) {
     </main>
   );
 }
-*/

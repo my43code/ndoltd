@@ -1,4 +1,4 @@
-import { connectMongoDB } from "@/lib/mongodb";
+/*import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/Post";
 import slugify from "slugify";
 import { NextResponse } from "next/server";
@@ -391,7 +391,7 @@ export async function POST(request) {
     );
   }
 }*/
-/*
+
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/Post";
 import slugify from "slugify";
@@ -449,4 +449,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-}*/
+}
