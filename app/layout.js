@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/components/AuthProvider";
 import { connection } from "next/server";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "Nexus DevOps Limited",
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }) {
           <main className="flex-grow">{children}</main>
           <Footer />
         </AuthProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
