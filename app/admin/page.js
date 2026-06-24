@@ -368,7 +368,7 @@ export default function AdminPage() {
       setStatus(errorData.message || "Failed to update project.");
     }
   }
-async function createPost(e) {
+/*async function createPost(e) {
   e.preventDefault();
 
   setStatus("⏳ Creating post...");
@@ -396,7 +396,7 @@ async function createPost(e) {
     console.error("REQUEST ERROR:", error);
     setStatus("❌ Network error. Check console.");
   }
-}
+}*/
   /*async function createPost(e) {
     e.preventDefault();
     const res = await fetch("/api/posts", {
@@ -414,7 +414,7 @@ async function createPost(e) {
       setStatus(errorData.message || "Failed to create post.");
     }
   }*/
-/*
+
     async function createPost(e) {
   e.preventDefault();
 
@@ -440,7 +440,7 @@ async function createPost(e) {
     console.error("REQUEST ERROR:", error);
     setStatus("Request failed.");
   }
-}*/
+}
 
   async function deletePost(id) {
     const res = await fetch(`/api/posts/${id}`, {
