@@ -9,7 +9,7 @@ const ProjectSchema = new mongoose.Schema(
     video: { type: String },
     link: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true } 
 );
 
 export default mongoose.models.Project || mongoose.model("Project", ProjectSchema);
