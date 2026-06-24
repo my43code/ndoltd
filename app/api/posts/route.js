@@ -3,7 +3,7 @@ import Post from "@/models/Post";
 import slugify from "slugify";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/requireAdmin";
-import { revalidateSite } from "@/lib/revalidateSite";
+import { revalidateSite } from "@/lib/revalidateSite"; 
 
 export async function GET() {
   try {
@@ -13,7 +13,7 @@ export async function GET() {
   } catch (error) {
     console.error("GET /api/posts error:", error);
     return NextResponse.json(
-      { message: "Failed to fetch posts", posts: [] },
+      { message: "Failed to fetch posts", posts: []  },
       { status: 500 }
     );
   }
