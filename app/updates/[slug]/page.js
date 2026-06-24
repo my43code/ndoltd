@@ -1,4 +1,71 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { connectMongoDB } from "@/lib/mongodb";
+import Post from "@/models/Post";
+import Image from "next/image";
 
+export const revalidate = 60;
+
+async function getPost(slug) {
+  try {
+    await connectMongoDB();
+
+    const post = await Post.findOne({ slug });
+
+    return post ? JSON.parse(JSON.stringify(post)) : null;
+  } catch (error) {
+    console.error("Failed to load post:", error);
+    return null;
+  }
+}
+
+export default async function PostDetailPage({ params }) {
+  const { slug } = params;
+
+  const post = await getPost(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return (
+    <main className="bg-slate-50">
+      <div className="border-b border-slate-200 bg-white/80 px-6 py-4">
+        <div className="mx-auto max-w-5xl">
+          <Link
+            href="/updates"
+            className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline"
+          >
+            Back to Updates
+          </Link>
+        </div>
+      </div>
+
+      <article className="mx-auto max-w-5xl px-6 py-16">
+        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+
+        {post.image && (
+          <div className="relative h-[400px] mb-6">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              className="object-cover rounded-lg"
+            />
+          </div>
+        )}
+
+        <p className="mb-4 text-gray-600">{post.summary}</p>
+
+        <div className="whitespace-pre-wrap">{post.content}</div>
+      </article>
+    </main>
+  );
+}
+
+
+
+/*
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { connectMongoDB } from "@/lib/mongodb";
@@ -92,7 +159,7 @@ export default async function PostDetailPage({ params }) {
       </article>
     </main>
   );
-}
+}*/
 
 /*import { notFound } from "next/navigation";
 import Link from "next/link";
