@@ -5,7 +5,153 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/requireAdmin";
 import { revalidateSite } from "@/lib/revalidateSite"; 
 
-export async function GET() {
+export async function POST(request) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
+
+  try {
+    const { title, summary, content, image } = await request.json();
+
+    if (!title || !summary || !content) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    await connectMongoDB();
+
+    // ✅ AUTO FIX OLD POSTS (IMPORTANT)
+    const posts = await Post.find();
+
+    for (const post of posts) {
+      if (!post.slug) {
+        const fixedSlug = slugify(post.title, {
+          lower: true,
+          strict: true,
+        });
+
+        post.slug = fixedSlug;
+        await post.save();
+      }
+    }
+
+    // ✅ GENERATE NEW SLUG
+    const baseSlug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+
+    let uniqueSlug = baseSlug;
+    let count = 1;
+
+    while (await Post.findOne({ slug: uniqueSlug })) {
+      uniqueSlug = `${baseSlug}-${count}`;
+      count++;
+    }
+
+    // ✅ CREATE POST
+    const newPost = await Post.create({
+      title,
+      summary,
+      content,
+      image,
+      slug: uniqueSlug,
+    });
+
+    revalidateSite();
+
+    return NextResponse.json(
+      { message: "Post created successfully", post: newPost },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("POST error:", error);
+
+    return NextResponse.json(
+      {
+        message: "Failed to create post",
+        error: error?.message || "Unknown",
+      },
+      { status: 500 }
+    );
+  }
+}
+export async function POST(request) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
+
+  try {
+    const { title, summary, content, image } = await request.json();
+
+    if (!title || !summary || !content) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    await connectMongoDB();
+
+    // ✅ AUTO FIX OLD POSTS (IMPORTANT)
+    const posts = await Post.find();
+
+    for (const post of posts) {
+      if (!post.slug) {
+        const fixedSlug = slugify(post.title, {
+          lower: true,
+          strict: true,
+        });
+
+        post.slug = fixedSlug;
+        await post.save();
+      }
+    }
+
+    // ✅ GENERATE NEW SLUG
+    const baseSlug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+
+    let uniqueSlug = baseSlug;
+    let count = 1;
+
+    while (await Post.findOne({ slug: uniqueSlug })) {
+      uniqueSlug = `${baseSlug}-${count}`;
+      count++;
+    }
+
+    // ✅ CREATE POST
+    const newPost = await Post.create({
+      title,
+      summary,
+      content,
+      image,
+      slug: uniqueSlug,
+    });
+
+    revalidateSite();
+
+    return NextResponse.json(
+      { message: "Post created successfully", post: newPost },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("POST error:", error);
+
+    return NextResponse.json(
+      {
+        message: "Failed to create post",
+        error: error?.message || "Unknown",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+
+/*export async function GET() {
   try {
     await connectMongoDB();
     const posts = await Post.find().sort({ createdAt: -1 });
@@ -76,7 +222,7 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-}
+}*/
 /*
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/Post";
