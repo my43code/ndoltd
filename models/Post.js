@@ -6,7 +6,17 @@ const postSchema = new Schema(
     summary: { type: String, required: true },
     content: { type: String, required: true },
     image: { type: String, default: "/images/project1.webp" },
+
+    
+ // ✅ ADD THIS BLOCK
+    slug: { 
+      type: String, 
+      required: true, 
+      unique: true 
+    },
+
   },
+  
   {
     timestamps: true,
   }
