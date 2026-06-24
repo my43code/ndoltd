@@ -369,7 +369,7 @@ export default function AdminPage() {
     }
   }
 
-  async function createPost(e) {
+  /*async function createPost(e) {
     e.preventDefault();
     const res = await fetch("/api/posts", {
       method: "POST",
@@ -385,7 +385,34 @@ export default function AdminPage() {
       const errorData = await res.json();
       setStatus(errorData.message || "Failed to create post.");
     }
+  }*/
+
+    async function createPost(e) {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postForm),
+      credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setPostForm(emptyPost);
+      setStatus("Post created.");
+      await loadData();
+    } else {
+      setStatus(data.message || data.error || "Failed to create post.");
+      console.error("ERROR:", data);
+    }
+  } catch (error) {
+    console.error("REQUEST ERROR:", error);
+    setStatus("Request failed.");
   }
+}
 
   async function deletePost(id) {
     const res = await fetch(`/api/posts/${id}`, {
