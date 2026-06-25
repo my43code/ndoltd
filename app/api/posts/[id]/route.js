@@ -162,9 +162,28 @@ export async function PUT(request, { params }) {
     }
 
     await connectMongoDB();
+
+    const baseSlug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+
+    let uniqueSlug = baseSlug;
+    let count = 1;
+
+    while (
+      await Post.findOne({
+        slug: uniqueSlug,
+        _id: { $ne: id },
+      })
+    ) {
+      uniqueSlug = `${baseSlug}-${count}`;
+      count++;
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(
       id,
-      { title, summary, content, image },
+      { title, summary, content, image, slug: uniqueSlug },
       { new: true, runValidators: true }
     );
 

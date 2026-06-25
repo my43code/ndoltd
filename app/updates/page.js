@@ -51,7 +51,7 @@ export default async function UpdatesPage() {
                 Contact us
               </Link>
               <Link
-                href={latestPost ? `/updates/${latestPost._id}` : "/contact"}
+                href={latestPost ? `/updates/${latestPost.slug || latestPost._id}` : "/contact"}
                 className="rounded-full border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur transition hover:border-white/30 hover:bg-white/10"
               >
                 Read latest update

@@ -429,11 +429,25 @@ export async function POST(request) {
 
     await connectMongoDB();
 
+    const baseSlug = slugify(title, {
+      lower: true,
+      strict: true,
+    });
+
+    let uniqueSlug = baseSlug;
+    let count = 1;
+
+    while (await Post.findOne({ slug: uniqueSlug })) {
+      uniqueSlug = `${baseSlug}-${count}`;
+      count++;
+    }
+
     const newPost = await Post.create({
       title,
       summary,
       content,
       image,
+      slug: uniqueSlug,
     });
 
     revalidateSite();
