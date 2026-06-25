@@ -27,7 +27,7 @@ async function getPost(slug) {
 }
 
 export default async function PostDetailPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = await getPost(slug);
 
   if (!post) {

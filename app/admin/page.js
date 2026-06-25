@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import LoadingState from "@/components/LoadingState";
 
+
 const emptyService = {
   title: "",
   description: "",
@@ -140,22 +141,25 @@ function readFileAsDataUrl(file) {
 }
 
 async function fetchDashboardData() {
-  const [servicesRes, projectsRes, postsRes, aboutRes] = await Promise.all([
-    fetch("/api/services", { cache: "no-store" }),
-    fetch("/api/projects", { cache: "no-store" }),
-    fetch("/api/posts", { cache: "no-store" }),
-    fetch("/api/about", { cache: "no-store" }),
+  const [servicesRes, projectsRes, postsRes, aboutRes, messagesRes] = await Promise.all([
+    fetch("/api/services", { cache: "no-store", credentials: "include" }),
+    fetch("/api/projects", { cache: "no-store", credentials: "include" }),
+    fetch("/api/posts", { cache: "no-store", credentials: "include" }),
+    fetch("/api/about", { cache: "no-store", credentials: "include" }),
+    fetch("/api/contact", { cache: "no-store", credentials: "include" }),
   ]);
 
   const services = servicesRes.ok ? await servicesRes.json() : [];
   const projects = projectsRes.ok ? await projectsRes.json() : [];
   const postsData = postsRes.ok ? await postsRes.json() : { posts: [] };
   const about = aboutRes.ok ? await aboutRes.json() : emptyAbout;
+  const messagesData = messagesRes.ok ? await messagesRes.json() : { messages: [] };
 
   return {
     services,
     projects,
     posts: postsData.posts || [],
+    messages: messagesData.messages || [],
     about,
   };
 }
@@ -169,6 +173,7 @@ export default function AdminPage() {
   const [services, setServices] = useState([]);
   const [projects, setProjects] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [about, setAbout] = useState(emptyAbout);
 
   const [serviceForm, setServiceForm] = useState(emptyService);
@@ -178,10 +183,11 @@ export default function AdminPage() {
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [editingPostId, setEditingPostId] = useState(null);
 
-  function applyDashboardData({ services, projects, posts, about }) {
+  function applyDashboardData({ services, projects, posts, messages, about }) {
     setServices(services);
     setProjects(projects);
     setPosts(posts);
+    setMessages(messages);
     setAbout(about);
   }
 
@@ -455,6 +461,23 @@ export default function AdminPage() {
     }
   }
 
+  async function deleteMessage(id) {
+    const res = await fetch("/api/contact", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+      credentials: "include",
+    });
+
+    if (res.ok) {
+      setStatus("Message deleted.");
+      await loadData();
+    } else {
+      const errorData = await res.json();
+      setStatus(errorData.message || "Failed to delete message.");
+    }
+  }
+
   function editPost(item) {
     setEditingPostId(item._id);
     setPostForm({
@@ -517,6 +540,7 @@ export default function AdminPage() {
     { id: "services", label: "Services" },
     { id: "projects", label: "Projects" },
     { id: "posts", label: "Posts" },
+    { id: "messages", label: "Messages" },
     { id: "about", label: "About" },
   ];
 
@@ -901,6 +925,72 @@ export default function AdminPage() {
                   ))
                 )}
               </div>
+            </div>
+          )}
+
+          {tab === "messages" && (
+            <div className="space-y-4">
+              <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <h2 className="text-xl font-semibold">Contact Messages</h2>
+                    <p className="text-sm text-slate-500">
+                      Review incoming messages sent through the contact form.
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-700">
+                    {messages.length} messages
+                  </span>
+                </div>
+              </div>
+
+              {messages.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
+                  No contact messages yet.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {messages.map((item) => (
+                    <div
+                      key={item._id}
+                      className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm"
+                    >
+                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                        <div>
+                          <p className="text-sm text-slate-500">
+                            {new Date(item.createdAt).toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                          <h3 className="text-lg font-semibold text-slate-900">
+                            {item.subject}
+                          </h3>
+                        </div>
+                        <div className="text-sm text-slate-600">
+                          <p>{item.name}</p>
+                          <p>{item.email}</p>
+                        </div>
+                      </div>
+                      <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-slate-100 bg-slate-50 p-4 text-slate-700">
+                        {item.message}
+                      </div>
+                      <div className="mt-4 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => deleteMessage(item._id)}
+                          className="text-red-600 text-sm font-medium"
+                        >
+                          Delete message
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
