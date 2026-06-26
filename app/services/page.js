@@ -22,14 +22,14 @@ async function getServices() {
 
 function MetricCard({ icon: Icon, label, value, detail }) {
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-4 backdrop-blur-xl">
+    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-4 backdrop-blur-xl hover:border-emerald-400/50 hover:bg-white/12 transition-all duration-300 card-hover animate-fade-in-up glow-pulse">
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-200">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-200 group-hover:scale-110 transition group-hover:shadow-lg group-hover:shadow-emerald-500/30">
           <Icon size={18} />
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{label}</p>
-          <p className="mt-1 text-2xl font-black text-white">{value}</p>
+          <p className="mt-1 text-2xl font-black text-white text-gradient">{value}</p>
         </div>
       </div>
       {detail ? <p className="mt-3 text-sm leading-6 text-slate-300">{detail}</p> : null}

@@ -50,16 +50,16 @@ async function getPosts() {
 
 function StatCard({ icon: Icon, label, value, detail }) {
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-4 backdrop-blur-xl">
+    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-4 backdrop-blur-xl hover:border-emerald-400/50 hover:bg-white/12 transition-all duration-300 card-hover animate-fade-in-up glow-pulse">
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-200">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-200 hover:scale-110 transition hover:shadow-lg hover:shadow-emerald-500/30">
           <Icon size={18} />
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             {label}
           </p>
-          <p className="mt-1 text-2xl font-black text-white">{value}</p>
+          <p className="mt-1 text-2xl font-black text-white text-gradient">{value}</p>
         </div>
       </div>
       {detail ? <p className="mt-3 text-sm leading-6 text-slate-300">{detail}</p> : null}
@@ -74,8 +74,8 @@ function SectionCard({ title, description, accent = "emerald" }) {
       : "from-sky-500/20 via-sky-500/10 to-transparent text-sky-700";
 
   return (
-    <div className="rounded-[1.75rem] border border-slate-200 bg-white p-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-      <div className={`inline-flex rounded-full bg-gradient-to-r px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] ${accentStyles}`}>
+    <div className="rounded-[1.75rem] border border-slate-200 bg-white p-7 shadow-[0_18px_50px_rgba(15,23,42,0.08)] hover:shadow-[0_24px_70px_rgba(15,23,42,0.12)] transition-all duration-300 card-hover animate-fade-in-up hover:border-emerald-300/50">
+      <div className={`inline-flex rounded-full bg-gradient-to-r px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] ${accentStyles} animate-bounce-in`}>
         {title}
       </div>
       <p className="mt-5 text-sm leading-7 text-slate-600 md:text-base">
@@ -87,7 +87,7 @@ function SectionCard({ title, description, accent = "emerald" }) {
 
 function ValueChip({ value }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700">
+    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 transition-all duration-300 animate-fade-in-up link-hover">
       <BadgeCheck size={15} className="text-emerald-600" />
       {value}
     </span>
@@ -98,7 +98,7 @@ function ProjectCard({ project }) {
   const mediaType = project?.video ? "video" : "image";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_24px_60px_rgba(15,23,42,0.14)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] transition duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_24px_60px_rgba(15,23,42,0.14)] card-hover animate-fade-in-up hover:border-emerald-300/50">
       <MediaFrame
         image={project?.image}
         video={project?.video}
